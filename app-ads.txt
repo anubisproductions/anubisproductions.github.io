@@ -1,0 +1,3 @@
+# app-ads.txt for Anubis Productions
+# Add the line AdMob gives you under Apps > app-ads.txt, for example:
+# google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0

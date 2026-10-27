@@ -1,0 +1,108 @@
+/* Anubis Productions — one stylesheet, no frameworks, no third-party requests.
+   Palette and type from shared/docs/pharaonic_style_guide.md. */
+
+@font-face {
+	font-family: "Cinzel";
+	src: url("assets/cinzel.ttf") format("truetype");
+	font-weight: 400 900;
+	font-display: swap;
+}
+
+:root {
+	--tomb: #1a1712;
+	--tomb-deep: #12100c;
+	--linen: #f5edd8;
+	--sand: #e8d6a6;
+	--gold: #d4af37;
+	--lapis: #1e4e8c;
+	--malachite: #1f7a4d;
+	--dim: #a2957a;
+	--line: rgba(212, 175, 55, 0.22);
+}
+
+* { box-sizing: border-box; }
+
+body {
+	margin: 0;
+	background: radial-gradient(1200px 600px at 50% -10%, #241f17 0%, var(--tomb) 45%, var(--tomb-deep) 100%);
+	color: var(--linen);
+	font-family: Georgia, "Times New Roman", serif;
+	font-size: 17px;
+	line-height: 1.65;
+	-webkit-text-size-adjust: 100%;
+}
+
+a { color: var(--gold); text-decoration: none; border-bottom: 1px solid var(--line); }
+a:hover { border-bottom-color: var(--gold); }
+
+.wrap { max-width: 860px; margin: 0 auto; padding: 0 20px; }
+
+header { text-align: center; padding: 56px 0 24px; }
+header img { width: 128px; height: auto; }
+h1 {
+	font-family: "Cinzel", Georgia, serif;
+	font-size: 2.1rem;
+	letter-spacing: 0.06em;
+	margin: 18px 0 6px;
+	color: var(--sand);
+}
+.tagline { color: var(--dim); margin: 0; font-size: 1.05rem; }
+
+h2 {
+	font-family: "Cinzel", Georgia, serif;
+	font-size: 1.25rem;
+	letter-spacing: 0.04em;
+	color: var(--sand);
+	margin: 40px 0 14px;
+	padding-bottom: 8px;
+	border-bottom: 1px solid var(--line);
+}
+
+h3 { font-family: "Cinzel", Georgia, serif; font-size: 1.05rem; margin: 0 0 4px; color: var(--linen); }
+
+.apps { display: grid; gap: 18px; grid-template-columns: 1fr; }
+@media (min-width: 680px) { .apps { grid-template-columns: 1fr 1fr; } }
+
+.app {
+	background: rgba(245, 237, 216, 0.04);
+	border: 1px solid var(--line);
+	border-radius: 14px;
+	padding: 20px;
+	display: flex;
+	gap: 16px;
+	align-items: flex-start;
+}
+.app img { width: 56px; height: 56px; border-radius: 12px; flex: 0 0 auto; }
+.app p { margin: 6px 0 10px; color: var(--dim); font-size: 0.95rem; }
+.app .links { font-size: 0.9rem; }
+.app .links a + a { margin-left: 14px; }
+
+.badge {
+	display: inline-block;
+	font-family: "Cinzel", Georgia, serif;
+	font-size: 0.7rem;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	padding: 2px 8px;
+	border-radius: 999px;
+	border: 1px solid var(--line);
+	color: var(--sand);
+	vertical-align: middle;
+	margin-left: 8px;
+}
+.badge.live { color: #8fd6ac; border-color: rgba(143, 214, 172, 0.4); }
+
+footer {
+	margin: 64px 0 40px;
+	padding-top: 18px;
+	border-top: 1px solid var(--line);
+	color: var(--dim);
+	font-size: 0.88rem;
+	text-align: center;
+}
+
+/* Privacy pages */
+.doc p, .doc li { color: var(--linen); }
+.doc ul { padding-left: 22px; }
+.doc .meta { color: var(--dim); font-size: 0.9rem; }
+.back { display: inline-block; margin: 28px 0 0; font-size: 0.9rem; }
