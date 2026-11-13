@@ -1,2 +1,6 @@
-play/index.pck binary
-play/index.wasm binary
+# The export writes these under play/<game>/game/. The old patterns named
+# play/index.wasm, which never matched anything, so git was diffing a 37 MB
+# binary as text.
+play/**/*.pck binary
+play/**/*.wasm binary
+play/**/*.js binary
