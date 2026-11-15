@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to play Hashi — rules and solving techniques</title>
+<meta name="description" content="The rules of Hashi (Hashiwokakero, Bridges) and the five techniques that solve every puzzle without guessing: counting, crossing, the cut, the seal, and the probe.">
+<link rel="canonical" href="https://anubisproductions.github.io/hashi/how-to-play.html">
+<link rel="icon" href="../assets/anubis-logo.png">
+<link rel="stylesheet" href="../style.css">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Anubis Productions">
+<meta property="og:url" content="https://anubisproductions.github.io/hashi/how-to-play.html">
+<meta property="og:title" content="How to play Hashi — rules and solving techniques">
+<meta property="og:description" content="The rules of the Japanese bridges puzzle, and the five techniques that solve every board without ever guessing.">
+<meta property="og:image" content="https://anubisproductions.github.io/assets/hashi-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How to play Hashi — rules and solving techniques">
+<meta name="twitter:description" content="The rules of the Japanese bridges puzzle, and the five techniques that solve every board without ever guessing.">
+<meta name="twitter:image" content="https://anubisproductions.github.io/assets/hashi-cover.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How to play Hashi — rules and solving techniques",
+  "description": "The rules of Hashi (Hashiwokakero, Bridges) and the five techniques that solve every puzzle without guessing.",
+  "image": "https://anubisproductions.github.io/assets/hashi-cover.png",
+  "author": { "@type": "Organization", "name": "Anubis Productions" },
+  "publisher": { "@type": "Organization", "name": "Anubis Productions" },
+  "mainEntityOfPage": "https://anubisproductions.github.io/hashi/how-to-play.html"
+}
+</script>
+</head>
+<body>
+<div class="wrap doc">
+
+<header>
+	<img src="../assets/anubis-logo.png" alt="Anubis Productions">
+	<h1>How to play Hashi</h1>
+	<p class="tagline">The rules, then the five techniques that solve any board.</p>
+</header>
+
+<main>
+
+	<p>Hashi — in full <strong>Hashiwokakero</strong> (橋をかけろ, "build
+	bridges"), and published in English as <strong>Bridges</strong> — is a
+	Japanese logic puzzle. It was first printed by Nikoli in
+	<em>Puzzle Communication Nikoli</em> in 1990. You will also see it written
+	<em>Hashi wo Kakero</em>, and misspelled <em>Hasiwokakero</em>.</p>
+
+	<p>You can <a href="../play/hashi/">play it in your browser right now</a>,
+	with nothing to install.</p>
+
+	<h2>The rules</h2>
+
+	<p>A board is a grid with numbered circles on it. Each circle is an
+	<strong>island</strong>, and its number says exactly how many bridge ends
+	must touch it.</p>
+
+	<ul>
+		<li><strong>Bridges run straight</strong> — horizontally or vertically
+		between two islands. Never diagonally, never bending.</li>
+		<li><strong>At most two bridges</strong> join the same pair of islands.
+		A double bridge counts as two towards both of its islands.</li>
+		<li><strong>Bridges may not cross</strong> each other, and may not pass
+		through an island.</li>
+		<li><strong>Every island's number must be met exactly</strong> — not at
+		least, not at most.</li>
+		<li><strong>The finished board must be one single network.</strong>
+		From any island you can walk the bridges to every other island. Two
+		correct-looking halves that do not touch is not a solution.</li>
+	</ul>
+
+	<p>That last rule is the one newcomers miss, and it is also the one that
+	makes the puzzle interesting — it turns a counting exercise into a
+	connectivity problem.</p>
+
+	<h2>You never have to guess</h2>
+
+	<p>A properly made Hashi has exactly one solution, and that solution is
+	reachable by reasoning alone. If you are stuck, there is a deduction you
+	have not spotted — not a coin to flip. Everything below is a way of
+	spotting one.</p>
+
+	<p>These are the same five reasons our game gives when you ask it for a
+	hint: it will not just place a bridge, it names the rule that forced it.</p>
+
+	<h3>1. Counting — what the number leaves over</h3>
+
+	<p>Count an island's neighbours and the most bridges they could take. If
+	the island's number needs all of it, every one of those bridges is
+	certain.</p>
+
+	<p>The classic cases:</p>
+
+	<ul>
+		<li>An island marked <strong>4 in a corner</strong> has only two
+		directions. Two directions hold at most four bridges, so both pairs are
+		doubles. Certain, immediately.</li>
+		<li>An island marked <strong>6 on an edge</strong> has three
+		directions, holding at most six. All three are doubles.</li>
+		<li>An island marked <strong>8 anywhere</strong> has four directions
+		and needs all eight. Four doubles.</li>
+		<li>An island marked <strong>3 with two directions</strong> must put at
+		least one bridge in each: three cannot fit in one pair.</li>
+	</ul>
+
+	<p>The general form: if <em>number</em> is greater than <em>maximum
+	possible − 2</em>, then every direction carries at least one bridge.</p>
+
+	<h3>2. Crossing — what another bridge forbids</h3>
+
+	<p>A placed bridge blocks the lane it occupies. Any bridge that would have
+	to cross it is impossible, so the islands that were counting on that
+	direction must find their bridges elsewhere.</p>
+
+	<p>This is why the order you solve in matters: each bridge you place
+	narrows somebody else's options, and the board gets easier as it fills.</p>
+
+	<h3>3. The cut — a bridge that has to exist</h3>
+
+	<p>Look for an island, or a small group, whose only remaining way to reach
+	the rest of the board is through one particular lane. Because the finished
+	board must be a single network, that bridge must exist. Nothing else can
+	connect them.</p>
+
+	<p>This technique finds bridges that pure counting never will, and it is
+	usually what breaks a board that feels stuck.</p>
+
+	<h3>4. The seal — a bridge that would strand a group</h3>
+
+	<p>The mirror image of the cut. Sometimes placing a bridge — or a second
+	bridge on an existing pair — would finish off a small group of islands,
+	satisfying all their numbers while leaving them sealed away from the rest
+	of the board.</p>
+
+	<p>That cannot be the answer, so that bridge is forbidden. Ruling it out
+	often forces the real one into view.</p>
+
+	<h3>5. The probe — follow it to a dead end</h3>
+
+	<p>The last resort, and still not guessing. Assume a particular number of
+	bridges in one lane, follow the consequences, and if they lead to a
+	contradiction — an island that can no longer reach its number, or a group
+	cut off for good — then that assumption was wrong and the alternative is
+	proven.</p>
+
+	<p>This is ordinary proof by contradiction. You are not trying something to
+	see what happens; you are establishing a fact.</p>
+
+	<h2>A way to work</h2>
+
+	<ol>
+		<li>Sweep the board for the forced numbers first — corners of 4, edges
+		of 6, any 8. They cost nothing to find.</li>
+		<li>Mark the directions you have ruled out. Knowing where a bridge
+		<em>cannot</em> go is worth as much as knowing where one must.</li>
+		<li>When counting dries up, switch to connectivity: look for the cut
+		and the seal.</li>
+		<li>Re-sweep after every few bridges. Each one you place changes what
+		the counting rule says about its neighbours.</li>
+		<li>Keep the single-network rule in view the whole way. A board that
+		satisfies every number but falls into two islands of islands is not
+		finished.</li>
+	</ol>
+
+	<h2>Common mistakes</h2>
+
+	<ul>
+		<li>Treating the number as a minimum. It is exact.</li>
+		<li>Forgetting that a double bridge counts twice at both ends.</li>
+		<li>Finishing every number and ignoring that the board is in two
+		pieces.</li>
+		<li>Guessing early on a hard board instead of looking for the cut.</li>
+	</ul>
+
+	<h2>Play it</h2>
+
+	<p>Our Hashi has four sizes — 7×7 and 9×9 with a hundred levels each to
+	learn on, then 12×12 and 15×15 that never run out, generated fresh on your
+	device. Every board has one solution and is checked to be solvable by
+	reasoning alone. The hint names the rule it used, and the check marks what
+	is wrong rather than only telling you that something is.</p>
+
+	<p class="links">
+		<a class="cta" href="https://play.google.com/store/apps/details?id=com.anubisproductions.hashi&amp;referrer=utm_source%3Danubis-site%26utm_medium%3Dweb%26utm_campaign%3Dhow-to-play">Get it on Google Play</a>
+		<a class="cta secondary" href="../play/hashi/">▶ Play in your browser</a>
+	</p>
+
+	<a class="back" href="../">← Anubis Productions</a>
+</main>
+
+<footer>
+	© 2026 Anubis Productions · Cairo, Egypt
+</footer>
+
+</div>
+</body>
+</html>
