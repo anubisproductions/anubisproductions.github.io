@@ -19,6 +19,11 @@
 	var ID = "G-5WH4QVJZF0";
 	var KEY = "anubis-consent";
 
+	/* Only the published site is measured. A copy of these pages served from a
+	   laptop while the game is being worked on would otherwise land in the same
+	   property and read as real visits. */
+	if (location.hostname !== "anubisproductions.github.io") { return; }
+
 	window.dataLayer = window.dataLayer || [];
 	function gtag() { dataLayer.push(arguments); }
 	window.gtag = gtag;
