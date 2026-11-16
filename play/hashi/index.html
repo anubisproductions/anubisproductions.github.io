@@ -104,7 +104,23 @@ body{
 <script src="/assets/analytics.js" defer></script>
 </head>
 <body>
-<iframe id="frame" src="game/" title="Hashi: Bridges" allow="autoplay; fullscreen"></iframe>
+<iframe id="frame" title="Hashi: Bridges" allow="autoplay; fullscreen"></iframe>
+<script>
+/* A link may name a level: ?level=medium-24. The engine inside the frame can
+   only read its own URL, so the parameter is copied onto the frame's src here.
+   Nothing else is forwarded: the utm fields belong to this page and are read
+   from here.
+
+   The iframe is given no src in the markup on purpose. Setting it afterwards
+   on an iframe that already has one starts a second load, and the build it
+   would abandon is nine megabytes of wasm. */
+(function () {
+	var f = document.getElementById("frame");
+	if (!f) { return; }
+	var m = location.search.match(/[?&]level=([A-Za-z]+-[0-9]+)(?:&|$)/);
+	f.src = "game/" + (m ? "?level=" + encodeURIComponent(m[1]) : "");
+})();
+</script>
 <p id="note">Hashi is made for a phone, so it plays as one here. &middot; <a class="store" href="https://play.google.com/store/apps/details?id=com.anubisproductions.hashi&amp;referrer=utm_source%3Danubis-site%26utm_medium%3Dweb%26utm_campaign%3Dweb-build">Get it on Google Play</a> &middot; <a href="../../hashi/how-to-play.html">How to play</a> &middot; <a href="../../">Anubis Productions</a></p>
 </body>
 </html>
