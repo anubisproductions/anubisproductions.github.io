@@ -19,10 +19,30 @@
 	var ID = "G-5WH4QVJZF0";
 	var KEY = "anubis-consent";
 
-	/* Only the published site is measured. A copy of these pages served from a
-	   laptop while the game is being worked on would otherwise land in the same
-	   property and read as real visits. */
-	if (location.hostname !== "anubisproductions.github.io") { return; }
+	/* The thing worth keeping out is a copy served from a laptop: testing these
+	   pages locally had already put four page views and two users into the
+	   property. So this refuses the local cases by name rather than listing the
+	   hosts that are allowed.
+
+	   Listing the allowed hosts was the first attempt and it was wrong: the
+	   build uploaded to itch loads this same file from our domain, and itch
+	   serves an HTML project from a host of its own choosing, today
+	   html-classic.itch.zone and at other times a CDN name. Naming them would
+	   mean the itch build stops reporting the day itch changes one. */
+	var host = location.hostname;
+	var local =
+		location.protocol === "file:" ||
+		host === "" ||
+		host === "localhost" ||
+		host === "127.0.0.1" ||
+		host === "::1" ||
+		host === "[::1]" ||
+		/(^|\.)local$/.test(host) ||
+		/(^|\.)localhost$/.test(host) ||
+		/^192\.168\./.test(host) ||
+		/^10\./.test(host) ||
+		/^172\.(1[6-9]|2\d|3[01])\./.test(host);
+	if (local) { return; }
 
 	window.dataLayer = window.dataLayer || [];
 	function gtag() { dataLayer.push(arguments); }
@@ -52,6 +72,25 @@
 
 	gtag("js", new Date());
 	gtag("config", ID, { anonymize_ip: true });
+
+	/* Every link out to the store is counted, on whichever page it sits. The
+	   listener is on the document rather than on each link so a page that gains
+	   a button later needs no change here, and so the frame page, whose link is
+	   written inline, is covered by the same code. */
+	document.addEventListener("click", function (ev) {
+		var a = ev.target && ev.target.closest ? ev.target.closest("a[href]") : null;
+		if (!a) { return; }
+		var href = a.href || "";
+		if (href.indexOf("play.google.com/store/apps") < 0) { return; }
+		var campaign = "";
+		var m = href.match(/utm_campaign%3D([^%&]+)/);
+		if (m) { campaign = decodeURIComponent(m[1]); }
+		gtag("event", "store_click", {
+			link_url: href,
+			store_campaign: campaign || "untagged",
+			surface: host
+		});
+	}, true);
 
 	if (stored) { return; }
 
