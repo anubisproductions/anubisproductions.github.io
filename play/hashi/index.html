@@ -99,6 +99,26 @@ body{
 }
 </style>
 
+<!-- Installable. The manifest points at THIS page rather than at the engine's
+     own export, so adding it to a home screen gets the portrait frame, the
+     store link and the measurement, not a bare canvas. The service worker is
+     here because a browser will not offer the install without one; it caches
+     nothing, and sw.js says why at length. -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#12100c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Hashi">
+<link rel="apple-touch-icon" href="/assets/hashi-icon-192.png">
+<script>
+if ("serviceWorker" in navigator) {
+	window.addEventListener("load", function () {
+		navigator.serviceWorker.register("sw.js").catch(function () {});
+	});
+}
+</script>
+
 <!-- Measurement. Consent defaults to denied inside this file; see the
      privacy policy for what it records. -->
 <script src="/assets/analytics.js" defer></script>
