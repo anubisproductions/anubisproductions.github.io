@@ -1,26 +1,28 @@
-/* Offering the home screen, and counting whether anyone takes it.
+/* Offering the home screen on every page, and counting whether anyone takes it.
 
-   The page became installable and said nothing about it, which installs for
-   nobody: Chrome buries "Add to Home screen" in a menu almost no one opens,
-   and Safari has no prompt at all. So this asks, once, and then never again.
+   Two ways of asking, because one page is not like the others.
 
-   When it asks matters more than how. On arrival the visitor has not played
-   anything yet and the answer is no, the same way it is no for every banner
-   that appears before a page has earned it. So the offer waits until someone
-   has been here a full minute, which on this page means they are playing.
+   Everywhere: a button that appears the moment the browser says the site can
+   be installed, sitting with the other links. It interrupts nothing. Somebody
+   reading the rules, or looking at a puzzle, can keep the game without first
+   finding their way to the board and waiting around on it.
 
-   What it is careful NOT to claim: offline. The service worker caches nothing
-   on purpose, so an installed copy still needs a connection to load. What it
-   actually buys is a launcher icon and a full screen with no browser chrome,
-   so that is what the words say. Offline is what the Android app is for, and
-   the store button is right there for anyone who wants it. */
+   On the game page only: a bar, after a minute. That page has no chrome at
+   all on a phone, the game fills the screen, so there is nowhere to put a
+   button; and a minute spent there means the visitor is playing, which is the
+   moment the question is worth asking. Asked once, and a no is remembered.
+
+   What this will not claim: offline. The worker caches nothing on purpose, so
+   an installed copy still needs a connection to load. What it buys is a
+   launcher icon and a full screen with no browser bars, so that is what the
+   words say. Offline is what the Android app is for, and the store link is
+   never far away. */
 
 (function () {
-	/* The worker lives at the site root so it controls every page, not just the
-	   game. A browser will not offer an install for a page no worker controls,
-	   and the manifest is scoped to the whole site for the same reason: the
-	   person reading the rules is as likely to want this as the one already
-	   playing. */
+	/* The worker lives at the site root so it controls every page, not just
+	   the game. A browser will not offer an install for a page no worker
+	   controls, and the manifest is scoped to the whole site for the same
+	   reason. */
 	if ("serviceWorker" in navigator) {
 		window.addEventListener("load", function () {
 			navigator.serviceWorker.register("/sw.js", { scope: "/" }).catch(function () {});
@@ -37,41 +39,93 @@
 	function track(name, extra) {
 		if (typeof window.gtag !== "function") { return; }
 		var p = extra || {};
-		p.surface = location.hostname;
+		p.surface = location.pathname;
 		window.gtag("event", name, p);
 	}
 
+	function buttons() {
+		return [].slice.call(document.querySelectorAll("[data-install]"));
+	}
+
+	function hideButtons() {
+		buttons().forEach(function (b) { b.hidden = true; });
+	}
+
 	/* Already installed and launched from the home screen. Worth counting on
-	   its own: it is the only way to tell an installed player apart from a
-	   browser one, and whether they come back. */
+	   its own: it is the only way to tell an installed player from a browser
+	   one, and whether they come back. */
 	var standalone = (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches)
 		|| window.navigator.standalone === true;
 	if (standalone) {
 		track("app_open_standalone");
+		document.addEventListener("DOMContentLoaded", hideButtons);
 		return;
 	}
 
-	if (get(KEY)) { return; }
+	var done = get(KEY);
+	if (done === "installed" || done === "accepted") {
+		document.addEventListener("DOMContentLoaded", hideButtons);
+		return;
+	}
 
 	var deferred = null;
 	var ios = /iphone|ipad|ipod/i.test(navigator.userAgent)
 		&& /safari/i.test(navigator.userAgent)
 		&& !/crios|fxios|edgios/i.test(navigator.userAgent);
+	var gamePage = /\/play\/hashi\//.test(location.pathname);
 	var armed = false;
 
 	window.addEventListener("beforeinstallprompt", function (e) {
-		// Keep the event. Chrome only lets prompt() run from one it gave us.
+		// Keep the event: Chrome only lets prompt() run from one it gave us.
 		e.preventDefault();
 		deferred = e;
-		arm();
+		showButtons();
+		if (gamePage) { arm(); }
 	});
 
 	window.addEventListener("appinstalled", function () {
 		set(KEY, "installed");
 		track("app_installed");
+		hideButtons();
 		var bar = document.getElementById("install-bar");
 		if (bar) { bar.remove(); }
 	});
+
+	function ask() {
+		if (!deferred) { return; }
+		deferred.prompt();
+		deferred.userChoice.then(function (choice) {
+			track(choice.outcome === "accepted" ? "install_accepted" : "install_declined");
+			if (choice.outcome === "accepted") {
+				set(KEY, "accepted");
+				hideButtons();
+			}
+			deferred = null;
+			var bar = document.getElementById("install-bar");
+			if (bar) { bar.remove(); }
+		});
+	}
+
+	function showButtons() {
+		var list = buttons();
+		if (!list.length) { return; }
+		list.forEach(function (b) {
+			if (!b.hidden) { return; }
+			b.hidden = false;
+			if (ios) {
+				b.addEventListener("click", function () {
+					track("install_ios_hint");
+					var note = document.createElement("span");
+					note.textContent = " Tap Share, then Add to Home Screen.";
+					note.style.cssText = "opacity:.85";
+					b.replaceWith(note);
+				});
+			} else {
+				b.addEventListener("click", function () { track("install_clicked"); ask(); });
+			}
+		});
+		track("install_button_shown", { offer_kind: ios ? "ios" : "prompt" });
+	}
 
 	function arm() {
 		if (armed) { return; }
@@ -82,13 +136,13 @@
 	function ready() {
 		if (get(KEY)) { return; }
 		// One bar at a time. The consent strip owns the bottom of the screen
-		// until it has been answered, and two stacked bars over a game is how
-		// a page gets closed rather than read.
+		// until it is answered, and two stacked bars over a game is how a page
+		// gets closed rather than read.
 		if (!get(CONSENT)) { setTimeout(ready, 10000); return; }
-		show();
+		showBar();
 	}
 
-	function show() {
+	function showBar() {
 		if (document.getElementById("install-bar")) { return; }
 		var bar = document.createElement("div");
 		bar.id = "install-bar";
@@ -122,24 +176,12 @@
 				"font-size:14px", "font-weight:700", "letter-spacing:0.02em",
 				"white-space:nowrap"
 			].join(";");
-			yes.addEventListener("click", function () {
-				if (!deferred) { return; }
-				deferred.prompt();
-				deferred.userChoice.then(function (choice) {
-					track(choice.outcome === "accepted" ? "install_accepted" : "install_declined");
-					// Declining is an answer. Asking again after one is how a
-					// prompt becomes the reason somebody leaves.
-					set(KEY, choice.outcome);
-					deferred = null;
-					bar.remove();
-				});
-			});
+			yes.addEventListener("click", ask);
 			bar.appendChild(yes);
 		}
 
 		var no = document.createElement("button");
 		no.type = "button";
-		no.setAttribute("aria-label", "No thanks");
 		no.textContent = ios ? "Got it" : "No thanks";
 		no.style.cssText = [
 			"cursor:pointer", "border:1px solid rgba(212,175,55,0.35)",
@@ -148,6 +190,8 @@
 			"font-weight:700", "white-space:nowrap"
 		].join(";");
 		no.addEventListener("click", function () {
+			// Dismissing the bar silences the bar, not the buttons. The buttons
+			// interrupt nothing, so there is nothing to forgive them for.
 			set(KEY, "dismissed");
 			track("install_dismissed");
 			bar.remove();
@@ -158,7 +202,10 @@
 		track("install_offer_shown", { offer_kind: ios ? "ios_hint" : "prompt" });
 	}
 
-	// Safari never fires beforeinstallprompt, so the iOS hint runs on its own
-	// clock rather than waiting for an event that is not coming.
-	if (ios) { arm(); }
+	// Safari never fires beforeinstallprompt, so iOS runs on its own clock
+	// rather than waiting for an event that is not coming.
+	if (ios) {
+		document.addEventListener("DOMContentLoaded", showButtons);
+		if (gamePage) { arm(); }
+	}
 })();

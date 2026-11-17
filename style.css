@@ -109,7 +109,9 @@ footer {
 .back { display: inline-block; margin: 28px 0 0; font-size: 0.9rem; }
 
 /* Play online */
-.app .links a.cta {
+.app .links a.cta,
+button.cta {
+	cursor: pointer;
 	display: inline-block;
 	background: var(--gold);
 	color: #1a1712;
@@ -121,7 +123,8 @@ footer {
 	letter-spacing: 0.03em;
 	margin-right: 6px;
 }
-.app .links a.cta:hover { filter: brightness(1.08); }
+.app .links a.cta:hover,
+button.cta:hover { filter: brightness(1.08); }
 
 /* The same button outside the app card. The rule above is scoped to
    `.app .links`, so the class quietly did nothing on any other page, which is
@@ -144,6 +147,7 @@ a.cta:hover { filter: brightness(1.08); }
 /* Secondary call to action: the browser build sits beside the store link, so
    one of them has to be quieter without being hidden. */
 .cta.secondary,
+button.cta.secondary,
 .app .links a.cta.secondary {
 	background: transparent;
 	color: var(--gold);
