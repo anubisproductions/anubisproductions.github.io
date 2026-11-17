@@ -121,6 +121,8 @@ button.cta {
 	font-family: "Cinzel", Georgia, serif;
 	font-size: 0.95rem;
 	letter-spacing: 0.03em;
+	line-height: 1.3;
+	vertical-align: middle;
 	margin-right: 6px;
 }
 .app .links a.cta:hover,
@@ -140,20 +142,37 @@ a.cta {
 	font-family: "Cinzel", Georgia, serif;
 	font-size: 0.95rem;
 	letter-spacing: 0.03em;
+	line-height: 1.3;
+	vertical-align: middle;
 	text-decoration: none;
 }
 a.cta:hover { filter: brightness(1.08); }
 
-/* Secondary call to action: the browser build sits beside the store link, so
-   one of them has to be quieter without being hidden. */
+/* Secondary call to action: the browser build and the home-screen offer sit
+   beside the store link, so one of them has to be quieter. Quieter, not
+   foreign: same pill, same Cinzel, same size, same height, gold instead of
+   gold-filled. A <button> that keeps any of the browser's own chrome reads as
+   part of the page's furniture rather than as the twin of the button next to
+   it, which is why every one of those properties is set rather than left. */
 .cta.secondary,
 button.cta.secondary,
-.app .links a.cta.secondary {
+.app .links a.cta.secondary,
+.doc .links a.cta.secondary {
 	background: transparent;
 	color: var(--gold);
-	border: 1px solid var(--line);
+	border: 1px solid rgba(212, 175, 55, 0.55);
+	/* A pixel off each end pays for the border, so an outlined button and a
+	   filled one standing side by side are the same height. */
+	padding: 8px 17px;
 }
-.app .links a.cta.secondary:hover { border-color: var(--gold); filter: none; }
+.cta.secondary:hover,
+button.cta.secondary:hover,
+.app .links a.cta.secondary:hover,
+.doc .links a.cta.secondary:hover {
+	border-color: var(--gold);
+	background: rgba(212, 175, 55, 0.1);
+	filter: none;
+}
 
 /* The how-to-play page reuses .links outside an .app card. */
 .doc .links { margin: 26px 0 0; }
@@ -167,12 +186,9 @@ button.cta.secondary,
 	font-family: "Cinzel", Georgia, serif;
 	font-size: 0.95rem;
 	letter-spacing: 0.03em;
+	line-height: 1.3;
+	vertical-align: middle;
 	margin: 0 8px 8px 0;
-}
-.doc .links a.cta.secondary {
-	background: transparent;
-	color: var(--gold);
-	border: 1px solid var(--line);
 }
 .doc h3 { margin: 26px 0 6px; color: var(--sand); }
 .doc ol { padding-left: 22px; }

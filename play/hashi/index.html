@@ -88,8 +88,31 @@ body{
 	border:0; border-radius:999px;
 	padding:7px 16px; margin:0 4px;
 	font-weight:700; letter-spacing:.02em;
+	line-height:1.3; vertical-align:middle;
 }
 #note a.store:hover{ filter:brightness(1.08); border:0; }
+
+/* The home-screen offer stands right next to the store button, so it is the
+   same object: same pill, same height, same type, outlined instead of filled
+   so the store still leads. This page carries its own stylesheet and never
+   loads /style.css, which is how this button spent its first day here
+   rendering as the browser's default grey box beside a gold one. */
+#note button.cta{
+	cursor:pointer;
+	display:inline-block;
+	vertical-align:middle;
+	background:transparent;
+	color:var(--gold);
+	border:1px solid rgba(212,175,55,.55);
+	border-radius:999px;
+	/* One pixel less top and bottom than the filled button, because this one
+	   carries a border and the two have to end up the same height. */
+	padding:6px 16px; margin:0 4px;
+	font-family:inherit; font-size:14px;
+	font-weight:700; letter-spacing:.02em;
+	line-height:1.3;
+}
+#note button.cta:hover{ border-color:var(--gold); background:rgba(212,175,55,.1); }
 @media (min-width:700px) and (min-height:560px){
 	#frame{
 		border-radius:18px;
