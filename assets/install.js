@@ -26,6 +26,16 @@
 	if ("serviceWorker" in navigator) {
 		window.addEventListener("load", function () {
 			navigator.serviceWorker.register("/sw.js", { scope: "/" }).catch(function () {});
+			/* The worker used to live at /play/hashi/sw.js. Moving a worker does
+			   not retire the old registration: a different scope is a different
+			   worker, so both survive and the narrower one goes on controlling
+			   the game page forever. Anyone who loaded the site before the move
+			   is carrying one. This retires it on their next visit. */
+			navigator.serviceWorker.getRegistrations().then(function (regs) {
+				regs.forEach(function (r) {
+					if (r.scope !== location.origin + "/") { r.unregister(); }
+				});
+			}).catch(function () {});
 		});
 	}
 
