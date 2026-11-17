@@ -68,13 +68,13 @@
 		|| window.navigator.standalone === true;
 	if (standalone) {
 		track("app_open_standalone");
-		document.addEventListener("DOMContentLoaded", hideButtons);
+		whenReady(hideButtons);
 		return;
 	}
 
 	var done = get(KEY);
 	if (done === "installed" || done === "accepted") {
-		document.addEventListener("DOMContentLoaded", hideButtons);
+		whenReady(hideButtons);
 		return;
 	}
 
@@ -85,13 +85,28 @@
 	var gamePage = /\/play\/hashi\//.test(location.pathname);
 	var armed = false;
 
+	/* This file is loaded without `defer` for one reason: the browser can fire
+	   beforeinstallprompt before a deferred script has run, and an event with
+	   no listener is gone for good. The game page hid that bug behind ten
+	   seconds of wasm loading; every other page showed it immediately.
+
+	   Everything that touches the DOM therefore waits for DOMContentLoaded;
+	   only the listener runs now. */
 	window.addEventListener("beforeinstallprompt", function (e) {
 		// Keep the event: Chrome only lets prompt() run from one it gave us.
 		e.preventDefault();
 		deferred = e;
-		showButtons();
+		whenReady(showButtons);
 		if (gamePage) { arm(); }
 	});
+
+	function whenReady(fn) {
+		if (document.readyState === "loading") {
+			document.addEventListener("DOMContentLoaded", fn);
+		} else {
+			fn();
+		}
+	}
 
 	window.addEventListener("appinstalled", function () {
 		set(KEY, "installed");
@@ -215,7 +230,7 @@
 	// Safari never fires beforeinstallprompt, so iOS runs on its own clock
 	// rather than waiting for an event that is not coming.
 	if (ios) {
-		document.addEventListener("DOMContentLoaded", showButtons);
+		whenReady(showButtons);
 		if (gamePage) { arm(); }
 	}
 })();
