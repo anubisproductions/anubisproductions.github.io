@@ -38,6 +38,16 @@
 
 <!-- Measurement. Consent defaults to denied inside this file; see the
      privacy policy for what it records. -->
+<!-- Installable from any page: the manifest is scoped to the whole site and
+     starts the game, so somebody reading the rules can keep it without first
+     finding their way to the board. -->
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#12100c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Hashi">
+<link rel="apple-touch-icon" href="/assets/hashi-icon-192.png">
+<script src="/assets/install.js" defer></script>
 <script src="/assets/analytics.js" defer></script>
 </head>
 <body>

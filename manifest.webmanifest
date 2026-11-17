@@ -2,13 +2,16 @@
   "name": "Hashi: Bridges & Islands",
   "short_name": "Hashi",
   "description": "The Japanese bridges puzzle. Join the numbered islands with bridges, and never a guess.",
-  "start_url": "./",
-  "scope": "./",
+  "start_url": "/play/hashi/",
+  "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#12100c",
   "theme_color": "#12100c",
-  "categories": ["games", "puzzle"],
+  "categories": [
+    "games",
+    "puzzle"
+  ],
   "lang": "en",
   "icons": [
     {
@@ -35,5 +38,6 @@
       "type": "image/png",
       "purpose": "maskable"
     }
-  ]
+  ],
+  "id": "/play/hashi/"
 }

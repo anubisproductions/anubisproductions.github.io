@@ -16,6 +16,17 @@
    the store button is right there for anyone who wants it. */
 
 (function () {
+	/* The worker lives at the site root so it controls every page, not just the
+	   game. A browser will not offer an install for a page no worker controls,
+	   and the manifest is scoped to the whole site for the same reason: the
+	   person reading the rules is as likely to want this as the one already
+	   playing. */
+	if ("serviceWorker" in navigator) {
+		window.addEventListener("load", function () {
+			navigator.serviceWorker.register("/sw.js", { scope: "/" }).catch(function () {});
+		});
+	}
+
 	var KEY = "anubis-install";
 	var CONSENT = "anubis-consent";
 	var WAIT_MS = 60000;

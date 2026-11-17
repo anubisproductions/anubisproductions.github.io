@@ -46,6 +46,16 @@
 
 <!-- Measurement. Consent defaults to denied inside this file; see the
      privacy policy for what it records. -->
+<!-- Installable from any page: the manifest is scoped to the whole site and
+     starts the game, so somebody reading the rules can keep it without first
+     finding their way to the board. -->
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#12100c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Hashi">
+<link rel="apple-touch-icon" href="/assets/hashi-icon-192.png">
+<script src="/assets/install.js" defer></script>
 <script src="/assets/analytics.js" defer></script>
 </head>
 <body>
@@ -70,7 +80,7 @@
 				number it asks for and the whole board is one network. Four sizes from
 				7×7 to 15×15, a hundred levels each to learn on, then Hard and Expert
 				that never run out, plus a daily puzzle and a weekly tournament. Hints
-				when you want them, a check when you are stuck, and twelve languages.</p>
+				when you want them, a check when you are stuck, and nineteen languages.</p>
 				<p>Never a guess: every board is generated with exactly one solution
 				and then checked to be solvable by reasoning alone. Plays with no
 				connection.</p>
@@ -80,8 +90,8 @@
 				or a desktop, and can be kept on your home screen without going near a
 				store.</p>
 				<div class="links">
-					<a class="cta" href="https://play.google.com/store/apps/details?id=com.anubisproductions.hashi&amp;referrer=utm_source%3Danubis-site%26utm_medium%3Dweb%26utm_campaign%3Dhomepage">Get it on Google Play</a>
 					<a class="cta secondary" href="play/hashi/">▶ Play in your browser</a>
+					<a class="cta" href="https://play.google.com/store/apps/details?id=com.anubisproductions.hashi&amp;referrer=utm_source%3Danubis-site%26utm_medium%3Dweb%26utm_campaign%3Dhomepage">Get it on Google Play</a>
 					<a href="hashi/how-to-play.html">How to play</a>
 					<a href="privacy/hashi.html">Privacy policy</a>
 				</div>
