@@ -38,7 +38,7 @@ a:hover { border-bottom-color: var(--gold); }
 .wrap { max-width: 860px; margin: 0 auto; padding: 0 20px; }
 
 header { text-align: center; padding: 56px 0 24px; }
-header img { width: 128px; height: auto; }
+header img { width: 144px; height: auto; } /* the game's shield, portrait, so it is wider than 128 to keep the motto legible */
 h1 {
 	font-family: "Cinzel", Georgia, serif;
 	font-size: 2.1rem;
