@@ -33,7 +33,7 @@
 </header>
 
 <main>
-	<p class="meta">Last updated 16 November 2026. Applies to the Android game
+	<p class="meta">Last updated 21 November 2026. Applies to the Android game
 	<strong>Hashi</strong>, package <code>com.anubisproductions.hashi</code>,
 	published by Anubis Productions, Cairo, Egypt.</p>
 
@@ -86,8 +86,21 @@
 		library adds a few of its own when the app is built: network state, wake
 		lock, a background-work service and the advertising identifier. They
 		are listed in full on the app's Play listing under "App permissions".</li>
-		<li>No analytics or crash reporting beyond what Firebase and AdMob need to run.</li>
+		<li>No crash reporting or diagnostics. Firebase Crashlytics is not in the build.</li>
 	</ul>
+
+	<h2 id="measure">What the game measures</h2>
+	<p>The game sends Google Analytics a short list of gameplay events: a puzzle
+	started, a puzzle finished and how long it took, a puzzle abandoned, a hint or a
+	check used, and a difficulty unlocked. Each one carries the difficulty and the
+	level number, and nothing else.</p>
+	<p>They are tied to a random number the game makes on your phone the first time it
+	runs and keeps in its own files. It is not your advertising identifier, not a
+	device identifier and not an account, it is not shared with the advertising side
+	of the app, and uninstalling the game destroys it.</p>
+	<p>Nothing is sent before you have answered the consent form the game shows you,
+	or, where the rules of your country do not require that form, before the game has
+	established that. Development builds send nothing at all.</p>
 
 	<h2 id="site">This website</h2>
 	<p>Everything above is about the Android game. This site,
