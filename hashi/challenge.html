@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Hashi board someone sent you</title>
+<meta name="description" content="Open the exact Hashi board a friend shared, in the app.">
+<!-- Every one of these is a different board for one person, so there is
+     nothing here for a search engine to index. follow, so the links out of
+     it still count. -->
+<meta name="robots" content="noindex, follow">
+<link rel="icon" sizes="32x32" href="../assets/anubis-icon-32.png">
+<link rel="icon" sizes="256x256" href="../assets/anubis-icon-256.png">
+<link rel="stylesheet" href="../style.css">
+<meta name="theme-color" content="#12100c">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Anubis Productions">
+<meta property="og:title" content="Can you solve this one?">
+<meta property="og:description" content="A Hashi board, shared from the app. Open it and play the same puzzle.">
+<meta property="og:image" content="https://anubisproductions.github.io/assets/hashi-share.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<script src="/assets/analytics.js" defer></script>
+</head>
+<body>
+<div class="wrap doc">
+
+<header>
+	<img src="../assets/anubis-logo-shield.png" alt="Anubis Productions">
+	<h1>Can you solve this one?</h1>
+	<p class="tagline" id="what">A Hashi board, shared from the app.</p>
+</header>
+
+<main>
+
+	<p id="lead">Opening it in Hashi&hellip;</p>
+
+	<p>
+		<a class="cta" id="open" href="#" hidden>Open in Hashi</a>
+		<a class="cta secondary" id="store" href="https://play.google.com/store/apps/details?id=com.anubisproductions.hashi&amp;referrer=utm_source%3Dhashi-app%26utm_medium%3Dshare%26utm_campaign%3Dchallenge">Get it on Google Play</a>
+	</p>
+
+	<p id="note" class="tagline">The app builds the board from the link, so
+	you will both be solving the same puzzle. Nothing is downloaded and
+	nothing is stored here.</p>
+
+	<p><a href="../play/hashi/">Or play Hashi in your browser</a> &middot;
+	<a href="how-to-play.html">the rules</a></p>
+
+	<a class="back" href="../">&larr; Anubis Productions</a>
+</main>
+
+<footer>
+	© 2026 Anubis Productions · Cairo, Egypt
+</footer>
+
+</div>
+
+<script>
+(function () {
+	"use strict";
+
+	// The four values that are the board. They are passed straight through to
+	// the app, which checks them properly; this page only has to avoid
+	// building a nonsense intent out of a mangled link.
+	var q = new URLSearchParams(location.search);
+	var v = q.get("v") || "";
+	var b = q.get("b") || "";
+	var s = q.get("s") || "";
+	var m = q.get("m") || "";
+
+	var BANDS = {
+		easy: ["Easy", "7×7"],
+		medium: ["Medium", "9×9"],
+		hard: ["Hard", "12×12"],
+		expert: ["Expert", "15×15"]
+	};
+
+	var ok = /^\d+$/.test(v) && /^-?\d+$/.test(s) && BANDS.hasOwnProperty(b)
+		&& /^[a-z]*$/.test(m);
+
+	var what = document.getElementById("what");
+	var lead = document.getElementById("lead");
+	var open = document.getElementById("open");
+	var note = document.getElementById("note");
+
+	if (!ok) {
+		what.textContent = "That link is missing something.";
+		lead.textContent = "Nothing here says which board it meant. The app " +
+			"is free either way.";
+		note.hidden = true;
+		return;
+	}
+
+	what.textContent = BANDS[b][0] + " · " + BANDS[b][1] +
+		(m ? " · shaped board" : "");
+
+	// Android: one URL that both opens the app and handles not having it.
+	// Chrome reads S.browser_fallback_url when no installed app claims the
+	// scheme, so the Play listing - tagged, per LISTINGS.md - is reached
+	// without this page having to guess whether the app is there. It cannot
+	// be asked, and every trick for guessing it is a timer that fires on a
+	// slow phone that did have the app.
+	var play = document.getElementById("store").href;
+	var deep = "intent://challenge?v=" + encodeURIComponent(v) +
+		"&b=" + encodeURIComponent(b) +
+		"&s=" + encodeURIComponent(s) +
+		(m ? "&m=" + encodeURIComponent(m) : "") +
+		"#Intent;scheme=hashi;package=com.anubisproductions.hashi;" +
+		"S.browser_fallback_url=" + encodeURIComponent(play) + ";end";
+
+	var android = /Android/i.test(navigator.userAgent);
+	open.href = android ? deep : play;
+	open.hidden = false;
+
+	if (!android) {
+		lead.textContent = "Hashi is an Android app. Open this link on your " +
+			"phone to play the board.";
+		open.textContent = "Get it on Google Play";
+		document.getElementById("store").hidden = true;
+		return;
+	}
+
+	lead.textContent = "Opening it in Hashi…";
+	// A click on this page is what lets the navigation happen at all on some
+	// Android browsers, so the button stays whatever the automatic attempt
+	// does. The attempt is deferred a tick so the page has painted and there
+	// is something to come back to.
+	setTimeout(function () { location.href = deep; }, 60);
+}());
+</script>
+</body>
+</html>
